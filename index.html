@@ -5,7 +5,6 @@
   <script src="https://cdn.jsdelivr.net/npm/socket.io@2.3.0/dist/socket.io.js"></script>
 </head>
 <body>
-  <h1>Real-time Textboxes</h1>
   <textarea id="python-textbox" placeholder="Python code"></textarea>
   <textarea id="html-textbox" placeholder="HTML code"></textarea>
   <textarea id="javascript-textbox" placeholder="JavaScript code"></textarea>
@@ -14,6 +13,12 @@
     const pythonTextbox = document.getElementById('python-textbox');
     const htmlTextbox = document.getElementById('html-textbox');
     const javascriptTextbox = document.getElementById('javascript-textbox');
+
+    socket.on('update-textboxes', (data) => {
+      pythonTextbox.value = data.python;
+      htmlTextbox.value = data.html;
+      javascriptTextbox.value = data.javascript;
+    });
 
     pythonTextbox.addEventListener('input', () => {
       socket.emit('update-python', pythonTextbox.value);
@@ -25,18 +30,6 @@
 
     javascriptTextbox.addEventListener('input', () => {
       socket.emit('update-javascript', javascriptTextbox.value);
-    });
-
-    socket.on('update-python', (data) => {
-      pythonTextbox.value = data;
-    });
-
-    socket.on('update-html', (data) => {
-      htmlTextbox.value = data;
-    });
-
-    socket.on('update-javascript', (data) => {
-      javascriptTextbox.value = data;
     });
   </script>
 </body>
