@@ -1,15 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Public Edit</title>
-  <script src="https://cdn.jsdelivr.net/npm/codemirror@5.63.3/dist/codemirror.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.63.3/dist/codemirror.min.css">
-  <link rel="stylesheet" href="style.css">
+  <title>Real-time Textboxes</title>
+  <script src="https://cdn.jsdelivr.net/npm/socket.io@2.3.0/dist/socket.io.js"></script>
 </head>
 <body>
-  <textarea id="code-editor"></textarea>
-  <button id="run-button">Run</button>
-  <div id="output"></div>
-  <script src="script.js"></script>
+  <h1>Real-time Textboxes</h1>
+  <textarea id="python-textbox" placeholder="Python code"></textarea>
+  <textarea id="html-textbox" placeholder="HTML code"></textarea>
+  <textarea id="javascript-textbox" placeholder="JavaScript code"></textarea>
+  <script>
+    const socket = io();
+    const pythonTextbox = document.getElementById('python-textbox');
+    const htmlTextbox = document.getElementById('html-textbox');
+    const javascriptTextbox = document.getElementById('javascript-textbox');
+
+    pythonTextbox.addEventListener('input', () => {
+      socket.emit('update-python', pythonTextbox.value);
+    });
+
+    htmlTextbox.addEventListener('input', () => {
+      socket.emit('update-html', htmlTextbox.value);
+    });
+
+    javascriptTextbox.addEventListener('input', () => {
+      socket.emit('update-javascript', javascriptTextbox.value);
+    });
+
+    socket.on('update-python', (data) => {
+      pythonTextbox.value = data;
+    });
+
+    socket.on('update-html', (data) => {
+      htmlTextbox.value = data;
+    });
+
+    socket.on('update-javascript', (data) => {
+      javascriptTextbox.value = data;
+    });
+  </script>
 </body>
 </html>
